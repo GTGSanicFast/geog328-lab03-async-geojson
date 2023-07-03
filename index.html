@@ -2,7 +2,7 @@
 <html lang="en-US">
     <head>
         <meta charset="utf-8">
-        <title>Earthquake List</title>
+        <title>Index List</title>
         <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
         <link href="https://api.mapbox.com/mapbox-gl-js/v2.5.0/mapbox-gl.css" rel="stylesheet">
         <script src="https://api.mapbox.com/mapbox-gl-js/v2.5.0/mapbox-gl.js"></script>
@@ -53,14 +53,14 @@
         <main id="container">
             <div id="side-panel">
 
-                <h2>index List</h2>
-                <button>Sort by Magnitude</button>
+                <h2>Earthquake List</h2>
+                <button>Sort by Population</button>
 
                 <table>
                     <tr>
-                        <th>id</th>
-                        <th>magnitude</th>
-                        <th>timestamp</th>
+                        <th>Name</th>
+                        <th>Population</th>
+                        <th>State</th>
                     </tr>
                 </table>
 
@@ -73,59 +73,59 @@
             let map = new mapboxgl.Map({
                 container: 'map',
                 style: 'mapbox://styles/mapbox/satellite-v9',
-                center: [138, 38],
-                zoom: 5.5
+                center: [-95, 37],
+                zoom: 3.5,
             });
 
             async function geojsonFetch() {
 
-                let response, earthquakes, japan, table;
-                response = await fetch('assets/earthquakes.geojson');
-                earthquakes = await response.json();
-                response = await fetch('assets/japan.json');
-                japan = await response.json();
+                let response, states, uni, table;
+                response = await fetch('assets/uni-filter.geojson');
+                uni = await response.json();
+                response = await fetch('assets/states.json');
+                states = await response.json();
 
                 table = document.getElementsByTagName("table")[0];
                 let row, cell1, cell2, cell3;
-                for (let i = 0; i < earthquakes.features.length; i++) {
+                for (let i = 0; i < uni.features.length; i++) {
                     // Create an empty <tr> element and add it to the 1st position of the table:
                     row = table.insertRow(-1);
                     cell1 = row.insertCell(0);
                     cell2 = row.insertCell(1);
                     cell3 = row.insertCell(2);
-                    cell1.innerHTML = earthquakes.features[i].properties.id;
-                    cell2.innerHTML = earthquakes.features[i].properties.mag;
-                    cell3.innerHTML = new Date(earthquakes.features[i].properties.time).toLocaleDateString("en-US");
+                    cell1.innerHTML = uni.features[i].properties.NAME;
+                    cell2.innerHTML = uni.features[i].properties.POPULATION;
+                    cell3.innerHTML = uni.features[i].properties.STATE;
                 }
 
                 map.on('load', function loadingData() {
 
-                    map.addSource('earthquakes', {
+                    map.addSource('uni', {
                         type: 'geojson',
-                        data: earthquakes
+                        data: uni
                     });
                     
                     map.addLayer({
-                        'id': 'earthquakes-layer',
+                        'id': 'uni-layer',
                         'type': 'circle',
-                        'source': 'earthquakes',
+                        'source': 'uni',
                         'paint': {
-                            'circle-radius': 8,
-                            'circle-stroke-width': 2,
+                            'circle-radius': 4,
+                            'circle-stroke-width': 1,
                             'circle-color': 'red',
                             'circle-stroke-color': 'white'
                         }
                     });
 
-                    map.addSource('japan', {
+                    map.addSource('states', {
                         type: 'geojson',
-                        data: japan
+                        data: states
                     });
 
                     map.addLayer({
-                        'id': 'japan-layer',
+                        'id': 'states-layer',
                         'type': 'fill',
-                        'source': 'japan',
+                        'source': 'states',
                         'paint': {
                             'fill-color': '#0080ff',
                             'fill-opacity': 0.5
