@@ -146,7 +146,7 @@
 
             btn.addEventListener('click', sortTable);
 
-            function sortTable(e) {
+            /* function sortTable(e) {
                 let table, rows, switching, i, x, y, shouldSwitch;
                 table = document.getElementsByTagName("table")[0];
                 switching = true;
@@ -167,7 +167,21 @@
                         switching = true;
                     }
                 }
-            }
+            } */
+
+            function sortTable(e) {
+                let table, rows;
+                table = document.getElementsByTagName("table")[0];
+                rows = Array.from(table.getElementsByTagName("tr")).slice(1);
+                const values = rows.map((row) => row.children[1].innerHTML);
+                const sortedRows = rows.sort((a, b) => {
+                    const valueA = values[rows.indexOf(a)];
+                    const valueB = values[rows.indexOf(b)];
+                    return valueB.localeCompare(valueA, undefined, { numeric: true, sensitivity: 'base' });
+                });
+                rows.forEach((row) => row.remove());
+                sortedRows.forEach((row) => table.appendChild(row));
+            };
 
             
         </script>
