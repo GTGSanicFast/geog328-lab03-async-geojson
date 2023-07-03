@@ -106,22 +106,7 @@
 
                 map.on('load', function loadingData() {
 
-                    map.addSource('uni', {
-                        type: 'geojson',
-                        data: uni
-                    });
                     
-                    map.addLayer({
-                        'id': 'uni-layer',
-                        'type': 'circle',
-                        'source': 'uni',
-                        'paint': {
-                            'circle-radius': 8,
-                            'circle-stroke-width': 2,
-                            'circle-color': 'red',
-                            'circle-stroke-color': 'white'
-                        }
-                    });
 
                     map.addSource('states', {
                         type: 'geojson',
@@ -133,8 +118,25 @@
                         'type': 'fill',
                         'source': 'states',
                         'paint': {
-                            'fill-color': '#0080ff',
+                            'fill-color': '#7C7C7C',
                             'fill-opacity': 0.5
+                        }
+                    });
+
+                    map.addSource('uni', {
+                        type: 'geojson',
+                        data: uni
+                    });
+                    
+                    map.addLayer({
+                        'id': 'uni-layer',
+                        'type': 'circle',
+                        'source': 'uni',
+                        'paint': {
+                            'circle-radius': 4,
+                            'circle-stroke-width': 1,
+                            'circle-color': 'orange',
+                            'circle-stroke-color': 'white'
                         }
                     });
                 });
